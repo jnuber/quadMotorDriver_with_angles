@@ -1,7 +1,9 @@
 # quadMotorDriver_with_angles
 Reseach Credits due: 
-	https://www.piborg.org/blog/joyborg
+	https://www.piborg.org/blog/joyborg 
+
 	https://tutorials-raspberrypi.com/raspberry-pi-xbox-360-controller-wireless/
+
 	https://pythonhosted.org/triangula/sixaxis.html
 
 Program to drive Raspberry Pi3 controlled 4 wheel chassi rover. Motors controlled by PiPlater Motor controller and XBox wireless
