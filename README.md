@@ -4,10 +4,10 @@ Reseach Credits due:
 	https://tutorials-raspberrypi.com/raspberry-pi-xbox-360-controller-wireless/
 	https://pythonhosted.org/triangula/sixaxis.html
 
-Program to drive Raspberry Pi3 controlled 4 wheel chassi rover. Motors controlled by PiPlater Motor controller and XBox wireless
+Program to drive Raspberry Pi3 controlled 4 wheel chassis rover. Motors controlled by PiPlater Motor controller and XBox wireless
 controller via Pygame library. Reading a USB wireless XBox controller's left axis number 0,1, determined the joystick's angle from when pressed. 
 
-Then used the the x/y value's offset from center to adjust left/right wheel speeds. Full forward, Reverse, hard left and right wheels are throttled at 100%. Other directions such as forward left/right, reverse left/right, one side will overdrive the other. For example, turning left, right side wheels will over drive left side and visa versa. NOTE that depending direction, x/y value are not always assigned to the same chassi wheels's drive side. 
+Then used the the x/y value's offset from center to adjust left/right wheel speeds. Full forward, Reverse, hard left and right wheels are throttled at 100%. Other directions such as forward left/right, reverse left/right, one side will overdrive the other. For example, turning left, right side wheels will over drive left side and vice-versa. NOTE that depending direction, x/y value are not always assigned to the same chassis wheel's drive side. 
 
  
  Calculating Angle                           /|
