@@ -1,4 +1,6 @@
 # quadMotorDriver_with_angles
+Credits due: https://pythonhosted.org/triangula/sixaxis.html
+
 Program to drive Raspberry Pi3 controlled 4 wheel chassi rover. Motors controlled by PiPlater Motor controller and XBox wireless
 controller via Pygame library. Reading a USB wireless XBox controller's left axis number 0,1, determined the joystick's angle from when pressed. 
 
