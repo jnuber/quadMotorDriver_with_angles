@@ -161,17 +161,17 @@ minSpeed = 5
 #=======================================================================
 # Main Logic Loop Start 
 #=======================================================================
-#   	     Forward
-#		  (-179 / 179)
-#			   180
+#            Forward
+#         (-179 / 179)
+#              180
+#               |
 #				|
-#				|
-#Left	270 ----+------ 90  Right
-#      (-90)	|
-#				|
-#			360 / 0
-#			(-1 / 1)
-#	         Reverse		
+#Left   270 ----+------ 90  Right
+#      (-90)    |
+#               |
+#            360 / 0
+#           (-1 / 1)
+#            Reverse		
 #=======================================================================
 
 while True:
@@ -274,7 +274,7 @@ while True:
 
 			#Forward Left Turning Angle
 			if(angle > 270 and angle < 180):
-				leftSpeed  = abs((x/axisMax * 100))
+				leftSpeed  = abs((y/axisMax * 100))
 				rightSpeed = abs((x/axisMax * 100))
 				if status != 'left':
 					status = MotorOff()
