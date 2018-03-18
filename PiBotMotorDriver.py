@@ -62,7 +62,7 @@ def initMotor(FLdir,FRdir,RLdir,RRdir):
 		status = "forward"
 		return
 	elif (FLdir == FRdir == RLdir == RRdir  == "ccw"): 
-		status = "backward" 
+		status = "reverse" 
 		return
 	elif (FLdir == RLdir == "cw"  and FRdir == RRdir == "ccw"):
 		status = "left"
@@ -76,10 +76,6 @@ def initMotor(FLdir,FRdir,RLdir,RRdir):
 def fwd(FLspeed,FRspeed,RLspeed,RRspeed):
 	# print("Forward motion called. CTL: ",ctl)
 	status = initMotor('cw','cw','cw','cw')
-	motor.dcCONFIG(ctl,FL,"cw",FLspeed ,0.0)
-	motor.dcCONFIG(ctl,FR,"cw",FRspeed ,0.0)
-	motor.dcCONFIG(ctl,RL,"cw",RLspeed ,0.0)
-	motor.dcCONFIG(ctl,RR,"cw",RRspeed ,0.0)
 	motor.dcSTART(ctl, FL)
 	motor.dcSTART(ctl, FR)
 	motor.dcSTART(ctl, RL)
@@ -90,11 +86,7 @@ def fwd(FLspeed,FRspeed,RLspeed,RRspeed):
 
 def reverse(FLspeed,FRspeed,RLspeed,RRspeed):
 	print("Reverse motion called. CTL: ",ctl)
-	status = initMotor('cvw','cvw','cvw','cvw')
-	motor.dcCONFIG(ctl,FL,"cvw",FLspeed ,0.0)
-	motor.dcCONFIG(ctl,FR,"cvw",FRspeed ,0.0)
-	motor.dcCONFIG(ctl,RL,"cvw",RLspeed ,0.0)
-	motor.dcCONFIG(ctl,RR,"cvw",RRspeed ,0.0)
+	status = initMotor('ccw','ccw','ccw','ccw')
 	motor.dcSTART(ctl, FL)
 	motor.dcSTART(ctl, FR)
 	motor.dcSTART(ctl, RL)
@@ -104,11 +96,7 @@ def reverse(FLspeed,FRspeed,RLspeed,RRspeed):
 	return status
 
 def left(FLspeed,FRspeed,RLspeed,RRspeed):
-	print("Someone need a Lefty???")
-	motor.dcCONFIG(ctl,FL,'ccw' ,FLspeed ,0.0)
-	motor.dcCONFIG(ctl,FR,'cw',FRspeed ,0.0)
-	motor.dcCONFIG(ctl,RL,'ccw' ,RLspeed ,0.0)
-	motor.dcCONFIG(ctl,RR,'cw',RRspeed ,0.0)
+	status = initMotor('ccw','cw','ccw','cw')
 	motor.dcSTART(ctl,FL)
 	motor.dcSTART(ctl,FR)
 	motor.dcSTART(ctl,RL)
@@ -118,11 +106,7 @@ def left(FLspeed,FRspeed,RLspeed,RRspeed):
 	return status
 
 def right(FLspeed,FRspeed,RLspeed,RRspeed):
-	#status = initMotor('ccw','cw','ccw','cw')
-	motor.dcCONFIG(ctl,FL,'cw',FLspeed ,0.0)
-	motor.dcCONFIG(ctl,FR,'ccw' ,FRspeed ,0.0)
-	motor.dcCONFIG(ctl,RL,'cw',RLspeed ,0.0)
-	motor.dcCONFIG(ctl,RR,'ccw',RRspeed ,0.0)
+	status = initMotor('cw','ccw','cw','ccw')
 	motor.dcSTART(ctl,FL)
 	motor.dcSTART(ctl,FR)
 	motor.dcSTART(ctl,RL)
@@ -132,7 +116,6 @@ def right(FLspeed,FRspeed,RLspeed,RRspeed):
 	return status
 
 def motorSpeed(FLspeed,FRspeed,RLspeed,RRspeed):
-	#print("{0}: {1}: {2}: {3}".format(round(LFspeed,2),round(RFspeed,2), round(LRspeed,2),round(RRspeed,2)))
 	motor.dcSPEED(ctl,FL,FLspeed)
 	motor.dcSPEED(ctl,FR,FRspeed)
 	motor.dcSPEED(ctl,RL,RLspeed)
@@ -228,6 +211,35 @@ while True:
 			if(angle < 0):
 				angle = angle  + 360
 
+			if(angle ==  180):
+				leftSpeed  = abs((y/axisMax * 100))
+				rightSpeed = abs((y/axisMax * 100))
+				if status != 'forward':
+					status = MotorOff()
+					status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				status = "forward"
+
+			if(angle == 0 ):
+				leftSpeed  = abs((y/axisMax * 100))
+				rightSpeed = abs((y/axisMax * 100))
+				if status != 'reverse':
+					status = MotorOff()
+					status = reverse(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				status = "reverse"
+
+
+			if(angle < 90 or angle > 270 ):
+				leftSpeed  = abs((y/axisMax * 100))
+				rightSpeed = abs((y/axisMax * 100))
+				if status != 'reverse':
+					status = MotorOff()
+					status = reverse(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				status = "reverse"
+
+
 			if(angle < 90 or angle > 270 ):
 				leftSpeed  = abs((y/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
@@ -249,7 +261,7 @@ while True:
 
 
 			'''Forward Right Turning Angle'''
-			if(angle > 90 and angle < 270 ):
+			if(angle > 90 and angle < 270 and angle != 180):
 				leftSpeed  = abs((x/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
 				if status != 'forward':
