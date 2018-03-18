@@ -161,18 +161,19 @@ minSpeed = 5
 #=======================================================================
 # Main Logic Loop Start 
 #=======================================================================
-''' 	     Forward
-		  (-179 / 179)
-			   180
-				|
-				|
-Left	270 ----+------ 90  Right
-	   (-90)	|
-				|
-			360 / 0
-			(-1 / 1)
-	         Reverse		
-'''
+#   	     Forward
+#		  (-179 / 179)
+#			   180
+#				|
+#				|
+#Left	270 ----+------ 90  Right
+#      (-90)	|
+#				|
+#			360 / 0
+#			(-1 / 1)
+#	         Reverse		
+#=======================================================================
+
 while True:
 	leftSpeed  = 100
 	rightSpeed = 100
@@ -211,6 +212,7 @@ while True:
 			if(angle < 0):
 				angle = angle  + 360
 
+			# Hard Forward
 			if(angle ==  180):
 				leftSpeed  = abs((y/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
@@ -220,6 +222,7 @@ while True:
 				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 				status = "forward"
 
+			# Hard Reverse
 			if(angle == 0 ):
 				leftSpeed  = abs((y/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
@@ -229,17 +232,7 @@ while True:
 				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 				status = "reverse"
 
-
-			if(angle < 90 or angle > 270 ):
-				leftSpeed  = abs((y/axisMax * 100))
-				rightSpeed = abs((y/axisMax * 100))
-				if status != 'reverse':
-					status = MotorOff()
-					status = reverse(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
-				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
-				status = "reverse"
-
-
+			# Reverse
 			if(angle < 90 or angle > 270 ):
 				leftSpeed  = abs((y/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
@@ -260,7 +253,7 @@ while True:
 				status = "right"
 
 
-			'''Forward Right Turning Angle'''
+			#Forward Right Turning Angle'''
 			if(angle > 90 and angle < 270 and angle != 180):
 				leftSpeed  = abs((x/axisMax * 100))
 				rightSpeed = abs((y/axisMax * 100))
@@ -269,7 +262,7 @@ while True:
 					status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 
-
+			#Hard Left
 			if(angle == 270):
 				leftSpeed  = abs((x/axisMax * 100))
 				rightSpeed = abs((x/axisMax * 100))
@@ -278,6 +271,15 @@ while True:
 					status = left(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 				status = "left"
+
+			#Forward Left Turning Angle
+			if(angle > 270 and angle < 180):
+				leftSpeed  = abs((x/axisMax * 100))
+				rightSpeed = abs((x/axisMax * 100))
+				if status != 'left':
+					status = MotorOff()
+					status = left(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+				motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 			
 			print('x: {0:>6.3f} y:{1:>6.3f} = {2:.0f} Degrees Speed(L/R): {3:.2f} : {4:.2f} Status: {5}'.format(abs(x)*100,abs(y)*100,angle,abs(leftSpeed),abs(rightSpeed),status))		
 			
