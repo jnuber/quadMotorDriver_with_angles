@@ -23,7 +23,7 @@ import MotorDrv
 import pygame
 from time import sleep
 import piplates.MOTORplate as MOTOR          #import the MOTORplate module
-import SR04                                  # RPi HC-SR04 multi-threaded 
+#import SR04                                  # RPi HC-SR04 multi-threaded 
 # import SR04_pigpio as SR04                 # The pigpio library verson requires the
                                              #  pigiod deamon to be running. 
 print("New SR04 module loaded...")
@@ -167,8 +167,8 @@ def main():
 	#=======================================================================
 	
 	#   Initialize multi-threaded HC-SR04 sonic sensor
-	DistThread = SR04.ChkDist(1,"ChkDist-1")
-	DistThread.start()
+	# DistThread = SR04.ChkDist(1,"ChkDist-1")
+	# DistThread.start()
 	
 	# Define Motors
 	global FL
@@ -232,7 +232,7 @@ def main():
 		rightSpeed = 100
 		#sleep(.25)
 	
-		status = chkDist(status)
+		#status = chkDist(status)
 	
 		for event in pygame.event.get():
 			if event.type == pygame.JOYBUTTONDOWN:
@@ -244,7 +244,7 @@ def main():
 				A = joystick.get_button(0)
 				if (A == 1):
 					print("Button A:",A)
-					exit()
+					# exit()
 					pass
 					
 			if event.type == pygame.JOYAXISMOTION:
@@ -253,7 +253,7 @@ def main():
 				speed = joystick.get_axis(2)
 			    
 				angle = math.degrees(math.atan2(x,y))
-				status = chkDist(status)	
+				#status = chkDist(status)	
 			
 		#===========================================================================================
 		# Determining drive direction is based on the calculated angle of the joystick's
@@ -330,6 +330,26 @@ def main():
 						status = left(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					status = "left"
+
+				# Reverse Right Turning Angle 
+				if(angle > 270 and angle <= 315):
+					leftSpeed  = yAxis
+					rightSpeed = xAxis-(yAxis/2) if (xAxis-(yAxis/2))  > 10 else 20
+					if status != 'reverse':
+						status = MotorOff()
+						status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					status = "reverse"
+
+				# Reverse Right Turning Angle 
+				if(angle > 315 and angle <= 360):
+					leftSpeed  = yAxis
+					rightSpeed = xAxis # -(yAxis/2) if (xAxis-(yAxis/2))  > 10 else 20
+					if status != 'reverse':
+						status = MotorOff()
+						status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					status = "reverse"
 	
 				# Hard Reverse
 				if(angle == 0 ):
@@ -340,17 +360,27 @@ def main():
 						status = reverse(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					status = "reverse"
-	
-				# Reverse turning left
-				if( (angle < 90 or angle > 280) and angle !=0):
+
+				# Reverse Left Turning Angle 
+				if(angle > 0 and angle <= 45):
 					leftSpeed  = xAxis
-					rightSpeed = yAxis
+					rightSpeed = yAxis-(xAxis/2) if (yAxis-(xAxis/2))  > 10 else 20
 					if status != 'reverse':
 						status = MotorOff()
-						status = reverse(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+						status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
 					status = "reverse"
-	
+					
+				# Reverse Left Turning Angle 
+				if(angle > 45 and angle < 90):
+					leftSpeed  = xAxis
+					rightSpeed = yAxis #-(xAxis/2) if (yAxis-(xAxis/2))  > 10 else 20
+					if status != 'reverse':
+						status = MotorOff()
+						status = fwd(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					motorSpeed(leftSpeed,rightSpeed,leftSpeed,rightSpeed)
+					status = "reverse"
+		
 				#Hard Right Turn
 				if(angle == 90.0):
 					leftSpeed  = xAxis
